@@ -52,9 +52,6 @@ public class RegistrationActivity extends AppCompatActivity {
         // Session manager
         session = new SessionManager(getApplicationContext());
 
-        // SQLite database handler
-        //db = new SQLiteHandler(getApplicationContext());
-
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
@@ -95,10 +92,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Function to store user in MySQL database will post params(tag, name,
-     * email, password) to register url
-     * */
+    // Function to store user in MySQL database will post params(tag, name, email, password) to register URL
     private void registerUser(final String name, final String adhaar, final String email,
                               final String password) {
         // Tag used to cancel the request
@@ -107,8 +101,7 @@ public class RegistrationActivity extends AppCompatActivity {
         pDialog.setMessage("Registering ...");
         showDialog();
 
-        StringRequest strReq = new StringRequest(Method.POST,
-                AppConfig.URL_REGISTER, new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Method.POST,AppConfig.URL_REGISTER, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -119,31 +112,17 @@ public class RegistrationActivity extends AppCompatActivity {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
                     if (!error) {
-                        // User successfully stored in MySQL
-                        // Now store the user in sqlite
-                        String uid = jObj.getString("uid");
-
-                        JSONObject user = jObj.getJSONObject("user");
-                        String name = user.getString("name");
-                        String email = user.getString("email");
-                        String created_at = user
-                                .getString("created_at");
-
-                        // Inserting row in users table
-                        //db.addUser(name, email, uid, created_at);
 
                         Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
 
                         // Launch login activity
-                        Intent intent = new Intent(
-                                RegistrationActivity.this,
-                                LoginActivity.class);
+                        Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
 
-                        // Error occurred in registration. Get the error
-                        // message
+                        // Error occurred in registration. Get the error message
+
                         String errorMsg = jObj.getString("error_msg");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
@@ -165,7 +144,7 @@ public class RegistrationActivity extends AppCompatActivity {
         }) {
 
             @Override
-            protected Map<String, String> getParams() {
+            protected Map<String, String> getParams() throws com.android.volley.AuthFailureError {
                 // Posting params to register url
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("name", name);

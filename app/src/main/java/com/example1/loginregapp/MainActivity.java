@@ -1,5 +1,6 @@
 package com.example1.loginregapp;
 
+import com.example1.loginregapp.R;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

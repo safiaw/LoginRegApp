@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -59,9 +60,9 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
-            finish();
+            //finish();
         }
 
         // Login button Click Event
@@ -89,8 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLinkToRegister.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),
-                        RegistrationActivity.class);
+                Intent i = new Intent(getApplicationContext(),RegistrationActivity.class);
                 startActivity(i);
                 finish();
             }
@@ -119,6 +119,9 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
+                    JSONObject userobj = (JSONObject) jObj.get("user");
+                    String name = userobj.getString("name");
+                    String email= userobj.getString("email");
 
                     // Check for error node in json
                     if (!error) {
@@ -126,23 +129,12 @@ public class LoginActivity extends AppCompatActivity {
                         // Create login session
                         session.setLogin(true);
 
-                        // Now store the user in SQLite
-                        String uid = jObj.getString("uid");
-
-                        JSONObject user = jObj.getJSONObject("user");
-                        String name = user.getString("name");
-                        String email = user.getString("email");
-                        String created_at = user
-                                .getString("created_at");
-
-                        // Inserting row in users table
-                        //db.addUser(name, email, uid, created_at);
-
                         // Launch main activity
-                        Intent intent = new Intent(LoginActivity.this,
-                                MainActivity.class);
+                        Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                        intent.putExtra("name", name);
+                        intent.putExtra("email",email);
                         startActivity(intent);
-                        finish();
+
                     } else {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");

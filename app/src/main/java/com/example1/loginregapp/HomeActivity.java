@@ -31,14 +31,12 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
 
         txtName = (TextView) findViewById(R.id.name);
         txtEmail = (TextView) findViewById(R.id.email);
         btnLogout = (Button) findViewById(R.id.btnLogout);
 
-        // SqLite database handler
-        //db = new SQLiteHandler(getApplicationContext());
 
         // session manager
         session = new SessionManager(getApplicationContext());
@@ -47,15 +45,16 @@ public class HomeActivity extends AppCompatActivity {
             logoutUser();
         }
 
-        // Fetching user details from sqlite
-        //HashMap<String, String> user = db.getUserDetails();
-
-        //String name = user.get("name");
-        //String email = user.get("email");
-
+        Bundle extras = getIntent().getExtras();
+        String name="",email="";
+        if (extras!=null) {
+            name = extras.getString("name");
+            email = extras.getString("email");
+        }
         // Displaying the user details on the screen
-        //txtName.setText(name);
-        //txtEmail.setText(email);
+
+        txtName.setText(name);
+        txtEmail.setText(email);
 
         // Logout button click event
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +76,7 @@ public class HomeActivity extends AppCompatActivity {
         //db.deleteUsers();
 
         // Launching the login activity
-        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
