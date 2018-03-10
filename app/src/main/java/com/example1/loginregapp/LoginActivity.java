@@ -121,13 +121,15 @@ public class LoginActivity extends AppCompatActivity {
                     boolean error = jObj.getBoolean("error");
                     JSONObject userobj = (JSONObject) jObj.get("user");
                     String name = userobj.getString("name");
-                    String email= userobj.getString("email");
+                    String email = userobj.getString("email");
+                    String loginToken = userobj.getString("loginToken");
 
                     // Check for error node in json
                     if (!error) {
                         // user successfully logged in
                         // Create login session
                         session.setLogin(true);
+                        session.setLogintoken(loginToken);
 
                         // Launch main activity
                         Intent intent = new Intent(LoginActivity.this,HomeActivity.class);

@@ -41,7 +41,7 @@ public class HomeActivity extends AppCompatActivity {
         // session manager
         session = new SessionManager(getApplicationContext());
 
-        if (!session.isLoggedIn()) {
+        if (!session.isLoggedIn() & session.getLoginToken()!=null ) {
             logoutUser();
         }
 
@@ -72,6 +72,7 @@ public class HomeActivity extends AppCompatActivity {
      * */
     private void logoutUser() {
         session.setLogin(false);
+        session.setLogintoken(null);
 
         //db.deleteUsers();
 
